@@ -36,6 +36,9 @@ class FollowTargetHud : Module() {
     private val scaleValue = FloatValue("Scale", 1F, 1F, 4F)
     private val onlyTarget = BoolValue("OnlyTarget",true)
     private val translateY = FloatValue("TanslateY", 0.55F,-2F,2F)
+    private val translateX = FloatValue("TranslateX", 0F, -2F, 2F)
+    
+    private var xChange = translateX.get() * 20F
 
     private var targetTicks = 0
     private var entityKeep = "yes"
@@ -144,22 +147,22 @@ class FollowTargetHud : Module() {
 
                 // render bg
                 glScalef(-scale * 2, -scale * 2, scale * 2)
-                drawRoundedCornerRect(-120f, -16f, -50f, 10f, 5f, Color(64, 64, 64, 255).rgb)
-                drawRoundedCornerRect(-110f, 0f, -20f, 35f, 5f, Color(96, 96, 96, 255).rgb)
+                drawRoundedCornerRect(-120f + xChange, -16f, -50f + xChange, 10f, 5f, Color(64, 64, 64, 255).rgb)
+                drawRoundedCornerRect(-110 + xChangef, 0f,   -20f + xChange, 35f, 5f, Color(96, 96, 96, 255).rgb)
 
                 // draw strings
-                fontRenderer.drawString("Attacking", -105, -13, Color.WHITE.rgb)
-                fontRenderer.drawString(tag, -106, 10, Color.WHITE.rgb)
+                fontRenderer.drawString("Attacking", -105  + xChange.toInt(), -13, Color.WHITE.rgb)
+                fontRenderer.drawString(tag,         -106  + xChange.toInt(), 10, Color.WHITE.rgb)
                 
                 val healthString = ( ( ( entity.health * 10f ).toInt() ).toFloat() * 0.1f ).toString() + " / 20" 
-                fontRenderer.drawString(healthString, -25 - fontRenderer.getStringWidth(healthString).toInt(), 22, Color.WHITE.rgb)
+                fontRenderer.drawString(healthString, -25 + xChange.toInt() - fontRenderer.getStringWidth(healthString).toInt(), 22, Color.WHITE.rgb)
                 
                 val distanceString = "⤢" + ( ( ( mc.thePlayer.getDistanceToEntity(entity) * 10f ).toInt() ).toFloat() * 0.1f ).toString() 
-                fontRenderer.drawString(tag, -25 - fontRenderer.getStringWidth(distanceString).toInt(), 10, Color.WHITE.rgb)
+                fontRenderer.drawString(tag, -25 + xChange.toInt() - fontRenderer.getStringWidth(distanceString).toInt(), 10, Color.WHITE.rgb)
                 
                 // draw health bars
-                drawRoundedCornerRect(-104f, 22f, -50f, 30f, 1f, Color(64, 64, 64, 255).rgb) 
-                drawRoundedCornerRect(-104f, 22f, -104f + (healthPercent * 54), 30f, 1f, Color.WHITE.rgb)
+                drawRoundedCornerRect(-104f + xChange, 22f, -50f   + xChange                       , 30f, 1f, Color(64, 64, 64, 255).rgb) 
+                drawRoundedCornerRect(-104f + xChange, 22f, -104f  + xChange + (healthPercent * 54), 30f, 1f, Color.WHITE.rgb)
                 
             }
             
@@ -167,11 +170,11 @@ class FollowTargetHud : Module() {
                 glScalef(-scale * 2, -scale * 2, scale * 2)
                 
                 // render bg
-                drawRoundedCornerRect(-40f, 0f, 40f, 30f, 5f, Color(72, 72, 72, 220).rgb)
+                drawRoundedCornerRect(-40f + xChange, 0f, 40f + xChange, 30f, 5f, Color(72, 72, 72, 220).rgb)
                 
                 // draw health bars
-                drawRoundedCornerRect(-35f, 7f, -35f + (healthPercent * 70) , 12f, 2f, Color(10, 250, 10, 255).rgb)
-                drawRoundedCornerRect(-35f, 17f, -35f + ((entity.totalArmorValue / 20F) * 70) , 22f, 2f, Color(10, 10, 250, 255).rgb)
+                drawRoundedCornerRect(-35f + xChange, 7f,  -35f + xChange + (healthPercent * 70) ,                  12f, 2f, Color(10, 250, 10, 255).rgb)
+                drawRoundedCornerRect(-35f + xChange, 17f, -35f + xChange + ((entity.totalArmorValue / 20F) * 70) , 22f, 2f, Color(10, 10, 250, 255).rgb)
                 
                    
             }
@@ -190,20 +193,20 @@ class FollowTargetHud : Module() {
 
                 // render bg
                 glScalef(-scale * 2, -scale * 2, scale * 2)
-                drawRect(0F, -fontRenderer.FONT_HEIGHT * 3F, width + 8F, -3F, bgColor)
+                drawRect(xChange, -fontRenderer.FONT_HEIGHT * 3F, width + 8F + xChange, -3F, bgColor)
 
                 // render hp bar
                 if (healthPercent> 1) {
                     healthPercent = 1F
                 }
 
-                drawRect(0F, -3F, maxWidth * healthPercent, 1F, hpBarColor)
-                drawRect(maxWidth * healthPercent, -3F, width + 8F, 1F, bgColor)
+                drawRect(xChange,                              -3F, (maxWidth * healthPercent) + xChange, 1F, hpBarColor)
+                drawRect((maxWidth * healthPercent) + xChange, -3F, width + 8F + xChange,                 1F, bgColor)
 
                 // string
-                fontRenderer.drawString(tag, 4, -fontRenderer.FONT_HEIGHT * 2 - 4, Color.WHITE.rgb)
+                fontRenderer.drawString(tag, 4 + xChange.toInt(), -fontRenderer.FONT_HEIGHT * 2 - 4, Color.WHITE.rgb)
                 glScalef(0.5F, 0.5F, 0.5F)
-                fontRenderer.drawString("Health: " + entity.health.toInt(), 4, -fontRenderer.FONT_HEIGHT * 2, Color.WHITE.rgb)
+                fontRenderer.drawString("Health: " + entity.health.toInt(), 4  + xChange.toInt(), -fontRenderer.FONT_HEIGHT * 2, Color.WHITE.rgb)
             }
         }
         // Reset caps
